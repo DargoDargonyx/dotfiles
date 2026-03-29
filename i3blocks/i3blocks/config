@@ -1,0 +1,70 @@
+# Separator
+[sep]
+separator=false
+command=echo "|< "
+interval=once
+
+# Internet
+[internet]
+separator=false
+command=~/.config/i3blocks/scripts/internet_status.sh
+interval=10
+markup=pango
+
+# Separator
+[sep]
+separator=false
+command=echo " >|<"
+interval=once
+
+# CPU
+[cpu]
+separator=false
+label= CPU 
+command=~/.config/i3blocks/scripts/cpu.sh
+interval=5
+
+# Separator
+[sep]
+separator=false
+command=echo " >|<"
+interval=once
+
+# Memory
+[memory]
+separator=false
+label= Mem 
+command=free -h | awk '/Mem:/ {print $3 "/" $2}'
+interval=5
+
+# Separator
+[sep]
+separator=false
+command=echo " >|<"
+interval=once
+
+# Battery
+[battery]
+separator=false
+command=~/.config/i3blocks/scripts/battery.sh
+interval=30
+markup=pango
+
+# Separator
+[sep]
+separator=false
+command=echo " >|< "
+interval=once
+
+# Time
+[time]
+separator=false
+command=~/.config/i3blocks/scripts/time.sh
+interval=1
+markup=pango
+
+# Separator
+[sep]
+separator=false
+command=echo " >|"
+interval=once
