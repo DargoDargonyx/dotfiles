@@ -56,7 +56,7 @@ sync_file() {
   local dest="$2"
 
   if [ -e "$src" ]; then
-    log "Syncing $src → $dest"
+    log "Syncing $src to $dest"
     mkdir -p "$(dirname "$dest")"
     cp -r "$src" "$dest"
   else
@@ -69,19 +69,19 @@ sync() {
   log "Syncing local configs to the git repo..."
 
   # bash
-  sync_file "$HOME/.bash_profile" "$DOTFILES_DIR/bash/.bash_profile"
-  sync_file "$HOME/.bashrc" "$DOTFILES_DIR/bash/.bashrc"
-  sync_file "$HOME/.bashrc.d" "$DOTFILES_DIR/bash/.bashrc.d"
+  sync_file "$HOME/.bash_profile" "$DOTFILES_DIR/bash/"
+  sync_file "$HOME/.bashrc" "$DOTFILES_DIR/bash/"
+  sync_file "$HOME/.bashrc.d" "$DOTFILES_DIR/bash/"
   # nvim
-  sync_file "$HOME/.config/nvim" "$DOTFILES_DIR/nvim"
+  sync_file "$HOME/.config/nvim" "$DOTFILES_DIR/"
   # kitty
-  sync_file "$HOME/.config/kitty" "$DOTFILES_DIR/kitty"
+  sync_file "$HOME/.config/kitty" "$DOTFILES_DIR/"
   # i3
-  sync_file "$HOME/.config/i3" "$DOTFILES_DIR/i3"
+  sync_file "$HOME/.config/i3" "$DOTFILES_DIR/"
   # i3blocks
-  sync_file "$HOME/.config/i3blocks" "$DOTFILES_DIR/i3blocks"
+  sync_file "$HOME/.config/i3blocks" "$DOTFILES_DIR/"
   # misc
-  sync_file "$HOME/.dircolors" "$DOTFILES_DIR/misc/.dircolors"
+  sync_file "$HOME/.dircolors" "$DOTFILES_DIR/misc/"
 
   log "Sync complete"
 }

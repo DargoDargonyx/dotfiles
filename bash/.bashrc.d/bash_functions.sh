@@ -45,3 +45,41 @@ backup() {
 psg () {
     ps aux | grep -i "$1" | grep -v grep
 }
+
+
+# Usage: countLines <file_extension> <directory> [--exclude dir1,dir2,...]
+countLines() {
+    local ext="${1#.}"
+    local dir="${2%/}"
+    shift 2
+    local excludes=()
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --exclude)
+                IFS=',' read -ra excludes <<< "$2"
+                shift 2
+                ;;
+            *)
+                echo "Unknown option: $1"
+                return 1
+                ;;
+        esac
+    done
+
+    local findArgs=("$dir")
+    for ex in "${excludes[@]}"; do
+        findArgs+=(-path "$dir/$ex" -prune -o)
+    done
+    findArgs+=(-name "*.$ext" -print)
+
+	find "${findArgs[@]}" | xargs wc -l | while IFS= read -r line; do
+		trimmed="${line#"${line%%[! ]*}"}"  # strip leading spaces
+		num="${trimmed%% *}"
+		rest="${trimmed#* }"
+		if [[ $trimmed =~ total$ ]]; then
+			echo -e "\033[1;36m$num\033[0m \033[38;5;135mtotal\033[0m"
+		else
+			echo -e "\033[1;36m$num\033[0m $rest"
+		fi
+	done
+}
