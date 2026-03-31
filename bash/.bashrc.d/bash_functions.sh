@@ -1,7 +1,7 @@
 # Usage: backup [-r] <destination_dir> <file_or_dir>
 backup() {
     local recursive=false
-    if [ "$1" == "-r" ]; then
+    if [ "${1}" == "-r" ]; then
         recursive=true
         shift
     fi
@@ -9,8 +9,8 @@ backup() {
         echo "Usage: backup [-r] <destination_dir> <file_or_dir>"
         return 1
     fi
-    local destDir="$1"
-    local src="$2"
+    local destDir="${1}"
+    local src="${2}"
     if [ ! -e "${src}" ]; then
         echo "Source not found: ${src}"
         return 1
@@ -43,7 +43,29 @@ backup() {
 
 # Usage: psg <program_name>
 psg () {
-    ps aux | grep -i "$1" | grep -v grep
+    ps aux | grep -i "${1}" | grep -v grep
+}
+
+# Usage: clearTmp [-options]
+clrTmp() {
+	if [ -n "${1}" ]; then
+		if [ "${1}" == "-d" ]; then
+			rm -rf "${HOME}/Downloads/"*
+			echo "Cleared Downloads directory"
+		else
+			if [ "${1}" == "-s" ]; then
+				rm -rf "${HOME}/Media/Screenshots/"*
+				echo "Cleared Screenshots directory"
+			else
+				echo "ERROR: Unknown option provided"
+			fi
+		fi
+	else
+		rm -rf "${HOME}/Downloads/"*
+		echo "Cleared Downloads directory"
+		rm -rf "$HOME/Media/Screenshots/"*
+		echo "Cleared Screenshots directory"
+	fi
 }
 
 
@@ -54,32 +76,32 @@ countLines() {
     shift 2
     local excludes=()
     while [[ $# -gt 0 ]]; do
-        case $1 in
+        case ${1} in
             --exclude)
-                IFS=',' read -ra excludes <<< "$2"
+                IFS=',' read -ra excludes <<< "${2}"
                 shift 2
                 ;;
             *)
-                echo "Unknown option: $1"
+                echo "Unknown option: ${1}"
                 return 1
                 ;;
         esac
     done
 
-    local findArgs=("$dir")
+    local findArgs=("${dir}")
     for ex in "${excludes[@]}"; do
-        findArgs+=(-path "$dir/$ex" -prune -o)
+        findArgs+=(-path "${dir}/${ex}" -prune -o)
     done
-    findArgs+=(-name "*.$ext" -print)
+    findArgs+=(-name "*.${ext}" -print)
 
 	find "${findArgs[@]}" | xargs wc -l | while IFS= read -r line; do
 		trimmed="${line#"${line%%[! ]*}"}"  # strip leading spaces
 		num="${trimmed%% *}"
 		rest="${trimmed#* }"
-		if [[ $trimmed =~ total$ ]]; then
-			echo -e "\033[1;36m$num\033[0m \033[38;5;135mtotal\033[0m"
+		if [[ ${trimmed} =~ total$ ]]; then
+			echo -e "\033[1;36m${num}\033[0m \033[38;5;135mtotal\033[0m"
 		else
-			echo -e "\033[1;36m$num\033[0m $rest"
+			echo -e "\033[1;36m${num}\033[0m ${rest}"
 		fi
 	done
 }
